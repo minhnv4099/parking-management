@@ -5,14 +5,13 @@
 
 import os
 import cv2
-from typing import Union, List
-
+from typing import Union, List, Iterable
+import numpy as np
 
 def extract_frames(
         video_path: str,
         out_dir: str = None,
-        num_frame: int = 1,
-        index: Union[int, List[int]] = 0,
+        frac: Union[float, List[float]] = 0.0,
 ) -> None:
     """
     :param video_path: Path to video needed to extract frames
@@ -28,17 +27,28 @@ def extract_frames(
 
     video = cv2.VideoCapture(video_path)
     assert video.isOpened()
-    i = 0
-    while True:
-        ret, frame = video.read()
 
+    frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+    frac_array = np.array(
+        frac if isinstance(frac, Iterable) else [frac],
+        dtype=np.float16
+    )
+    index_of_frame = (frac_array * frame_count).astype(np.int16)
+    index_of_frame = np.clip(
+        index_of_frame,
+        a_min=0, a_max=frame_count-1,
+    )
+    if frac == -1: index_of_frame = list(range(frame_count))
+
+    for i in range(frame_count):
+        ret, frame = video.read()
         if ret:
-            frame_path = os.path.join(out_dir, f"{video_name}_frame_{i}th.png")
-            print(frame_path)
-            cv2.imwrite(frame_path, frame)
-            i += 1
-            if i == num_frame and num_frame > 0:
-                break
+            if i in index_of_frame:
+                frame_path = os.path.join(out_dir, f"{video_name}_frame_{i}th.png")
+                cv2.imwrite(frame_path, frame)
+        else:
+            break
+
     video.release()
 
     return out_dir
