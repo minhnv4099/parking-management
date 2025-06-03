@@ -18,8 +18,9 @@ def make_points(json_path: str) -> List:
 
     return entries
 
+
 def write_boxes(boxes: List, text_path: str):
     with open(text_path, "w") as f:
         for x, y, w, h in boxes:
-            f.write(f"0 {x} {y} {w} {h} \n")
+            f.write(f"0 {x} {y} {w} {h}\n")
 

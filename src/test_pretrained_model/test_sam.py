@@ -10,7 +10,6 @@ import sys
 sys.path.append(os.curdir)
 
 import argparse
-import pickle
 
 from ultralytics import SAM
 from src.utils.data import make_points, write_boxes
@@ -55,7 +54,7 @@ def main(args: argparse.Namespace):
         points = None
         if os.path.isfile(point_path):
             points = make_points(point_path)
-            f_name = f"{f_name}_box"
+            f_name = f"{f_name}"
 
         results = predictor.predict(
             source=image_path,

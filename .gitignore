@@ -10,4 +10,4 @@
 data/
 tmp/
 models/
-prior_test/outputs_*
+src/prior_test/outputs_*
