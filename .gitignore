@@ -5,3 +5,9 @@
 
 #python file
 **/main.py
+
+# Folder
+data/
+tmp/
+models/
+prior_test/outputs_*
