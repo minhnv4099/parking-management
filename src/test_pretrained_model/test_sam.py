@@ -8,73 +8,109 @@
 import os
 import sys
 sys.path.append(os.curdir)
-
 import argparse
+import logging
 
-from ultralytics import SAM
-from src.utils.data import make_points, write_boxes
+from src.test_pretrained_model.config import SamConfig
+from src.test_pretrained_model.model import SamPredictor
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(os.path.basename(__file__))
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="",
+        prog="Segment object with SAM"
+    )
+
     parser.add_argument(
         "image_paths",
         nargs="+",
+        action="store",
+        help="Paths of images"
     )
     parser.add_argument(
-        "--point_path",
+        "--image-dir",
         required=False,
-        default=True,
+        default=None,
+        type=str,
+        help="Directory containing images or videos"
     )
     parser.add_argument(
-        "--out_dir",
+        "--model-name",
         required=False,
-        default="prior_test/outputs_sam/",
+        default='sam2.1_b',
+        help='Model name (e.g. sam2, sam2.1, sam2.1_l)'
+    )
+    parser.add_argument(
+        "--model-path",
+        required=False,
+        default=None,
+        help="Path to model",
+    )
+    parser.add_argument(
+        "--project",
+        required=False,
+        default=None,
+        help="Directory to save outputs"
+    )
+    parser.add_argument(
+        "--device",
+        required=False,
+        default='cpu',
+    )
+    parser.add_argument(
+        "--save",
+        required=False,
+        action="store_true",
+        help="Whether store output images/videos"
+    )
+    parser.add_argument(
+        "--prompt-type",
+        required=False,
+        default=None,
+    )
+    parser.add_argument(
+        "--prompt-dir",
+        required=False,
+        default=None,
+        help="Directory containing prompt files"
+    )
+    parser.add_argument(
+        "--export-box",
+        required=False,
+        action="store_true",
+        help="Whether export inference bbox",
+    )
+    parser.add_argument(
+        "--box-dir",
+        required=False,
+        default=None,
+        help="Directory that save bounding boxes output"
     )
 
     return parser.parse_args()
 
 
 def main(args: argparse.Namespace):
-    predictor = SAM(model="models/pretrained/sam2.1_b.pt", )
+    logger.info("construct config")
+    predict_config = SamConfig(
+        model_name=args.model_name,
+        model_path=args.model_path,
+        project=args.project,
+        prompt_dir=args.prompt_dir,
+        export_box=args.export_box,
+        box_dir=args.box_dir,
+        save=args.save,
+        device=args.device,
+        prompt_type=args.prompt_type
+    )
+    logger.info("construct model")
+    sam_predictor = SamPredictor(config=predict_config)
 
+    logger.info("segment images")
     for image_path in args.image_paths:
-        assert os.path.isfile(image_path)
-
-        f_name = os.path.basename(image_path).split(".")[0]
-        os.makedirs(args.out_dir, exist_ok=True)
-
-        point_path = args.point_path
-
-        if not point_path or not os.path.isfile(point_path):
-            point_path = f"data/external/points/jsons/{f_name}.json"
-            if not os.path.isfile(point_path):
-                point_path = point_path.replace('json', 'txt')
-
-        points = None
-        if os.path.isfile(point_path):
-            points = make_points(point_path)
-            f_name = f"{f_name}"
-
-        results = predictor.predict(
-            source=image_path,
-            save=False,
-            points=points,
-        )
-
-        write_boxes(
-            boxes=results[0].boxes.xywhn,
-            text_path=f"data/iterm/boxes/{f_name}.txt",
-        )
-
-        results[0].plot(
-            filename=os.path.join(args.out_dir, f"{f_name}_{len(os.listdir(args.out_dir))}.jpg"),
-            save=True,
-            line_width=1,
-            labels=False,
-            boxes=True,
-            masks=True,
-        )
+        sam_predictor.predict(source=image_path)
 
 
 if __name__ == "__main__":

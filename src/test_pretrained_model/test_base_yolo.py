@@ -9,10 +9,13 @@ import sys
 import os
 sys.path.append(os.curdir)
 import argparse
+import logging
 
 from ultralytics import YOLO
 from src.test_pretrained_model.config import YoloConfig
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(os.path.basename(__file__))
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -33,7 +36,7 @@ def get_args() -> argparse.Namespace:
         help="Directory containing images or videos"
     )
     parser.add_argument(
-        "--model-type",
+        "--model-name",
         required=False,
         default='yolo11n',
         help='Model type (e.g. yolo11n, yolo11s, yolo11m)'
@@ -63,7 +66,7 @@ def get_args() -> argparse.Namespace:
         help="Image size"
     )
     parser.add_argument(
-        "--out-dir",
+        "--project",
         required=False,
         default=None,
         help="Directory to save outputs"
@@ -82,37 +85,42 @@ def get_args() -> argparse.Namespace:
 
     return parser.parse_args()
 
+
 def main(args: argparse.Namespace):
+    logger.info("construct config")
     config = YoloConfig(
-        model_type=args.model_type,
+        model_name=args.model_name,
         model_path=args.model_path,
         task=args.task,
         mode=args.mode,
-        project=args.out_dir,
+        project=args.project,
         device=args.device,
         save=args.save,
         imgsz_predict=args.image_size,
         imgsz_train=args.image_size,
     )
 
+    logger.info("construct model")
     model = YOLO(
         model=config.model_path,
         task=config.task,
         verbose=True,
     )
+    logger.info("detect images")
     for image_path in args.image_paths:
         results = model.predict(
             source=image_path,
             stream=False,
-            save=not config.save,
+            save=config.save_run,
             imgsz=config.imgsz_predict,
         )
         if config.save:
             f_name = os.path.splitext(os.path.basename(image_path))[0]
             os.makedirs(config.project, exist_ok=True)
-            results[0].save(filename=os.path.join(config.project, f"{f_name}_{config.imgsz_predict}px.jpg"),)
+            results[0].save(filename=os.path.join(config.project, f"{f_name}_{config.imgsz_predict}px.jpg"))
         else:
             results[0].show()
+
 
 if __name__ == "__main__":
     args = get_args()

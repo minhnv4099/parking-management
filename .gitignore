@@ -11,3 +11,4 @@ data/
 tmp/
 models/
 src/prior_test/outputs_*
+assets/

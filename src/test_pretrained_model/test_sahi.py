@@ -12,10 +12,11 @@ import argparse
 import logging
 
 from sahi import AutoDetectionModel
-from sahi.predict import get_prediction, get_sliced_prediction
+from sahi.predict import get_sliced_prediction
 from src.test_pretrained_model.config import SahiConfig
 
-logger = logging.Logger(name=__file__, level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(os.path.basename(__file__))
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -106,6 +107,7 @@ def get_args() -> argparse.Namespace:
     return parser.parse_args()
 
 def main(args: argparse.Namespace):
+    logger.info("construct config")
     config = SahiConfig(
         model_type=args.model_type,
         model_path=args.model_path,
@@ -121,23 +123,16 @@ def main(args: argparse.Namespace):
         overlap_height_ratio=args.h_overlap,
     )
 
-    logger.info("Construct model")
+    logger.info("construct model")
     detection_model = AutoDetectionModel.from_pretrained(
         model_path=config.model_path,
         model_type=config.model_type,
         confidence_threshold=config.conf_threshold,
         device=config.device,
     )
-
+    logger.info("detect images")
     for image_path in args.image_paths:
-        logger.info("Detection using standard YOLO")
-        result_b = get_prediction(
-            image=image_path,
-            detection_model=detection_model,
-        )
-
-        logger.info("Detection using sliced prediction")
-        result_s = get_sliced_prediction(
+        result = get_sliced_prediction(
             image=image_path,
             detection_model=detection_model,
             slice_height=config.slice_height,
@@ -146,18 +141,9 @@ def main(args: argparse.Namespace):
             overlap_width_ratio=config.overlap_width_ratio,
         )
         if config.save:
-            logger.info("Save detected images")
             file_name = os.path.splitext(os.path.basename(image_path))[0]
             os.makedirs(config.project, exist_ok=True)
-            result_b.export_visuals(
-                export_dir=config.project,
-                rect_th=config.rect_th,
-                hide_conf=config.hide_conf,
-                file_name=f"{file_name}_b",
-                text_size=config.text_size,
-                hide_labels=config.hide_labels,
-            )
-            result_s.export_visuals(
+            result.export_visuals(
                 export_dir=config.project,
                 hide_conf=config.hide_conf,
                 file_name=f"{file_name}_s",
