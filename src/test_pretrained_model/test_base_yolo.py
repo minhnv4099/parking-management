@@ -12,10 +12,11 @@ import argparse
 import logging
 
 from ultralytics import YOLO
-from src.test_pretrained_model.config import YoloConfig
+from src.configs.config import YoloConfig
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(os.path.basename(__file__))
+
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -96,8 +97,7 @@ def main(args: argparse.Namespace):
         project=args.project,
         device=args.device,
         save=args.save,
-        imgsz_predict=args.image_size,
-        imgsz_train=args.image_size,
+        image_size=args.image_size,
     )
 
     logger.info("construct model")

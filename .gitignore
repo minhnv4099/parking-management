@@ -4,7 +4,7 @@
 .DS_Store/
 
 #python file
-**/main.py
+src/main.py
 
 # Folder
 data/
@@ -12,3 +12,7 @@ tmp/
 models/
 src/prior_test/outputs_*
 assets/
+
+# hydra
+outputs/
+.hydra/

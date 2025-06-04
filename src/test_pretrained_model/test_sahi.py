@@ -13,7 +13,7 @@ import logging
 
 from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
-from src.test_pretrained_model.config import SahiConfig
+from src.configs.config import SahiConfig
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(os.path.basename(__file__))

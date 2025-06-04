@@ -1,0 +1,7 @@
+defaults:
+  - model: ???
+  - data: sample
+
+hydra:
+  run:
+    dir: .

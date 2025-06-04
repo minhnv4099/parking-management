@@ -14,7 +14,7 @@ import supervision as sv
 import logging
 
 from ultralytics import YOLO
-from src.test_pretrained_model.config import SupervisionConfig
+from src.configs.config import SupervisionConfig
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(os.path.basename(__file__))

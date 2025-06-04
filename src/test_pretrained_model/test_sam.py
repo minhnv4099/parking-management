@@ -11,8 +11,8 @@ sys.path.append(os.curdir)
 import argparse
 import logging
 
-from src.test_pretrained_model.config import SamConfig
-from src.test_pretrained_model.model import SamPredictor
+from src.configs.config import SamConfig
+from src.models.sam import SamPredictor
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(os.path.basename(__file__))

@@ -1,0 +1,22 @@
+# Config for Supervision model
+_target_: src.models.supervision.SupervisionModel
+
+# argument for init of
+cfg:
+  ...
+
+task_cfg:
+  _target_: src.models.supervision.SvPredictionConfig
+  model_name: yolo11n
+  model_path: null
+  project: null
+  save: True
+  device: cpu
+  mode: predict
+
+  slice_wh: (256, 256)
+  overlap_wh: (0.2, 0.2)
+  thickness: 2
+  text_scale: 0.5
+  text_padding: 2
+  task: detect
