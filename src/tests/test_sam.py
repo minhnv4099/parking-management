@@ -12,10 +12,11 @@ import argparse
 import logging
 
 from src.configs.config import SamConfig
-from src.models.sam import SamPredictor
+from src.models.sam import SamModel
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(os.path.basename(__file__))
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -93,25 +94,25 @@ def parse_args() -> argparse.Namespace:
 
 
 def main(args: argparse.Namespace):
-    logger.info("construct config")
-    predict_config = SamConfig(
-        model_name=args.model_name,
-        model_path=args.model_path,
-        project=args.project,
-        prompt_dir=args.prompt_dir,
-        export_box=args.export_box,
-        box_dir=args.box_dir,
-        save=args.save,
-        device=args.device,
-        prompt_type=args.prompt_type
-    )
-    logger.info("construct model")
-    sam_predictor = SamPredictor(config=predict_config)
-
-    logger.info("segment images")
-    for image_path in args.image_paths:
-        sam_predictor.predict(source=image_path)
-
+    # logger.info("construct config")
+    # predict_config = SamConfig(
+    #     model_name=args.model_name,
+    #     model_path=args.model_path,
+    #     project=args.project,
+    #     prompt_dir=args.prompt_dir,
+    #     export_box=args.export_box,
+    #     box_dir=args.box_dir,
+    #     save=args.save,
+    #     device=args.device,
+    #     prompt_type=args.prompt_type
+    # )
+    # logger.info("construct model")
+    # sam_predictor = SamModel(config=predict_config)
+    #
+    # logger.info("segment images")
+    # for image_path in args.image_paths:
+    #     sam_predictor.predict(source=image_path)
+    ...
 
 if __name__ == "__main__":
     args = parse_args()

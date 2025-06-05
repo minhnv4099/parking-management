@@ -1,4 +1,4 @@
-# Auxilary directoty
+# auxilary directoty
 .venv/
 .idea/
 .DS_Store/
@@ -6,7 +6,7 @@
 #python file
 src/main.py
 
-# Folder
+# folder
 data/
 tmp/
 models/

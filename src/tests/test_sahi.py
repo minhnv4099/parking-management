@@ -18,6 +18,7 @@ from src.configs.config import SahiConfig
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(os.path.basename(__file__))
 
+
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="",
@@ -106,6 +107,7 @@ def get_args() -> argparse.Namespace:
 
     return parser.parse_args()
 
+
 def main(args: argparse.Namespace):
     logger.info("construct config")
     config = SahiConfig(
@@ -130,7 +132,7 @@ def main(args: argparse.Namespace):
         confidence_threshold=config.conf_threshold,
         device=config.device,
     )
-    logger.info("detect images")
+    logger.info("inference images")
     for image_path in args.image_paths:
         result = get_sliced_prediction(
             image=image_path,

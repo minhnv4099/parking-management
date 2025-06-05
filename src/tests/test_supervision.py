@@ -1,18 +1,20 @@
 #
-#  Copyright (c) 2025  Van Minh Nguyen
+#  Copyright (c) 2025 Van Minh Nguyen
 #  Licensed under the MIT license
 #
 
-# Test with various pretrained YOLO11 models when detecting objects
-
+# Try to detect small objects using slicer inference of supervision
 import sys
 import os
 sys.path.append(os.curdir)
 import argparse
+import cv2
+import numpy as np
+import supervision as sv
 import logging
 
 from ultralytics import YOLO
-from src.configs.config import YoloConfig
+from src.configs.config import SupervisionConfig
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(os.path.basename(__file__))
@@ -20,7 +22,8 @@ logger = logging.getLogger(os.path.basename(__file__))
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description=""
+        description="",
+        prog='Detect object by supervision'
     )
 
     parser.add_argument(
@@ -83,21 +86,35 @@ def get_args() -> argparse.Namespace:
         default=False,
         action="store_true",
     )
+    parser.add_argument(
+        "--slice-wh",
+        required=False,
+        default=(256, 256),
+        type=tuple,
+        help="Width and height of slicer"
+    )
+    parser.add_argument(
+        "--overlap-wh",
+        required=False,
+        default=(0.2, 0.2),
+        type=tuple,
+        help="overlap ratio width and height",
+    )
 
     return parser.parse_args()
 
 
 def main(args: argparse.Namespace):
     logger.info("construct config")
-    config = YoloConfig(
+    config = SupervisionConfig(
         model_name=args.model_name,
         model_path=args.model_path,
-        task=args.task,
-        mode=args.mode,
         project=args.project,
-        device=args.device,
         save=args.save,
-        image_size=args.image_size,
+        device=args.device,
+        slice_wh=args.slice_wh,
+        overlap_ratio_wh=args.overlap_wh,
+        task=args.task,
     )
 
     logger.info("construct model")
@@ -106,20 +123,43 @@ def main(args: argparse.Namespace):
         task=config.task,
         verbose=True,
     )
-    logger.info("detect images")
+
+    def callback(image_slice: np.ndarray) -> sv.Detections:
+        result = model(image_slice)[0]
+        return sv.Detections.from_ultralytics(result)
+
+    slicer = sv.InferenceSlicer(
+        callback=callback,
+        slice_wh=(256, 256),
+        overlap_ratio_wh=(0.2, 0.2),
+    )
+    logger.info("inference images")
     for image_path in args.image_paths:
-        results = model.predict(
-            source=image_path,
-            stream=False,
-            save=config.save_run,
-            imgsz=config.imgsz_predict,
+        image = cv2.imread(image_path)
+
+        detections = slicer(image)
+        box_annotator = sv.BoxAnnotator(
+            thickness=config.thickness,
         )
+        label_annotator = sv.LabelAnnotator(
+            text_scale=config.text_scale,
+            text_padding=config.text_padding,
+            text_color=config.text_color,
+            color=config.color,
+        )
+
+        annotated_image = box_annotator.annotate(
+            scene=image, detections=detections)
+        annotated_image = label_annotator.annotate(
+            scene=annotated_image, detections=detections)
+
         if config.save:
             f_name = os.path.splitext(os.path.basename(image_path))[0]
             os.makedirs(config.project, exist_ok=True)
-            results[0].save(filename=os.path.join(config.project, f"{f_name}_{config.imgsz_predict}px.jpg"))
-        else:
-            results[0].show()
+            cv2.imwrite(
+                os.path.join(config.project, f"{f_name}.jpg"),
+                annotated_image,
+            )
 
 
 if __name__ == "__main__":
@@ -127,4 +167,6 @@ if __name__ == "__main__":
     main(args)
 
 # Conclusion:
-#   Regardless of using larger model or/and larger image size, the generalization error is too poor.
+#   The base YOLO11n cannot also do anything well (no detection).
+#   In contrast, although supervision could detect more objects in image, almost all of them is not correct.
+#   -> The idea using a slicing window is also not good.
