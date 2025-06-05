@@ -97,7 +97,7 @@ def main(args: argparse.Namespace):
     # logger.info("construct config")
     # predict_config = SamConfig(
     #     model_name=args.model_name,
-    #     model_path=args.model_path,
+    #     model=args.model,
     #     project=args.project,
     #     prompt_dir=args.prompt_dir,
     #     export_box=args.export_box,

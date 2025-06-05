@@ -127,7 +127,7 @@ def main(args: argparse.Namespace):
 
     logger.info("construct model")
     detection_model = AutoDetectionModel.from_pretrained(
-        model_path=config.model_path,
+        model_path=config.model,
         model_type=config.model_type,
         confidence_threshold=config.conf_threshold,
         device=config.device,

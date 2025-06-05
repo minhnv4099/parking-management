@@ -1,0 +1,13 @@
+_target_: src.tasks.yolo.YoloPredictionConfig
+
+model_name: yolo11n
+model: null
+project: null
+save: True
+device: cpu
+mode: predict
+task: detect
+
+image_size: 640
+save_run: False
+model_task: yolo

@@ -1,20 +1,6 @@
 # Config for YOLO family
 _target_: src.models.yolo.YoloModel
 
-# argument for init of
-cfg:
-  ...
-
-task_cfg:
-  _target_: src.models.yolo.YoloPredictionConfig
-  model_name: yolo11n
-  model_path: null
-  project: null
-  save: True
-  device: cpu
-  mode: predict
-
-  task: detect
-  image_size: 640
-  save_run: False
-  model_task: yolo
+# argument for init
+cfg: ${cfg}
+task_cfg: ${task_cfg}

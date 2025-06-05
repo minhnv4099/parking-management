@@ -8,13 +8,13 @@ cfg:
 task_cfg:
   _target_: src.models.sam.SamPredictionConfig
   model_name: sam2.1_b
-  model_path: null
+  model: null
   project: null
   save: True
   device: cpu
   mode: predict
+  task: segment
 
-  task: seg
   export_box: True
   box_dir: data/iterm/boxes/
   save_run: False

@@ -1,5 +1,7 @@
 defaults:
-  - model: ???
+  - cfg: yolo
+  - model: yolo
+  - task_cfg: predict
   - data: sample
 
 hydra:
@@ -7,7 +9,7 @@ hydra:
     dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
   job:
     name: logs
-    chdir: false
+    chdir: True
   job_logging:
     version: 1
     formatters:

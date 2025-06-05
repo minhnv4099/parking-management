@@ -18,12 +18,7 @@ logger = logging.getLogger(__name__)
 
 @hydra.main(config_path="../configs/", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
-    logger.info("instantiate model")
-    model = instantiate(cfg.model)
-
-    for path in cfg.data.paths:
-        logger.info(f"inference '{path}'")
-        model.predict(path)
+    ...
 
 
 if __name__ == '__main__':

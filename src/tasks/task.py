@@ -13,7 +13,7 @@ class TaskConfig:
         default=None,
         metadata={"help": "name of model"},
     )
-    model_path: Optional[str] = field(
+    model: Optional[str] = field(
         default=None,
         metadata={"help": "path of model"}
     )
@@ -32,4 +32,8 @@ class TaskConfig:
     mode: Optional[str] = field(
         default=None,
         metadata={"help": "e.g. train/predict/val"}
+    )
+    task: Optional[str] = field(
+        default="detect",
+        metadata={"help": ""}
     )

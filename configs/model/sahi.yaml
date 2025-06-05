@@ -8,11 +8,12 @@ cfg:
 task_cfg:
   _target_: src.models.sahi.SahiPredictionConfig
   model_name: yolo11n
-  model_path: null
+  model: null
   project: null
   save: True
   device: cpu
   mode: predict
+  task: predict
 
   model_type: ultralytics
   conf_threshold: 0.25

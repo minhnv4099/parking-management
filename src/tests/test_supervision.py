@@ -119,7 +119,7 @@ def main(args: argparse.Namespace):
 
     logger.info("construct model")
     model = YOLO(
-        model=config.model_path,
+        model=config.model,
         task=config.task,
         verbose=True,
     )
