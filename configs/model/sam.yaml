@@ -1,27 +1,8 @@
-# Config for Sam model
+defaults:
+  - _self_
+
 _target_: src.models.sam.SamModel
+_partial_: True
 
-# argument for init of
-cfg:
-  ...
-
-task_cfg:
-  _target_: src.models.sam.SamPredictionConfig
-  model_name: sam2.1_b
-  model: null
-  project: null
-  save: True
-  device: cpu
-  mode: predict
-  task: segment
-
-  export_box: True
-  box_dir: data/iterm/boxes/
-  save_run: False
-  prompt_type: points
-  prompt_dir: null
-  line_width: 1
-  show_labels: False
-  show_masks: True
-  show_boxes: True
-  PROMPT_TYPES: ["points", ]
+cfg: ???
+task_cfg: ${task_cfg}

@@ -5,7 +5,7 @@ mode: predict
 task: detect
 
 model: null
-data: ${data.paths}
+data: ${data.path}
 epoches: 100
 time: null
 patience: 10

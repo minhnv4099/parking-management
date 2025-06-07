@@ -7,6 +7,8 @@
 
 import sys
 import os
+from unittest import TestCase
+
 sys.path.append(os.curdir)
 import argparse
 import logging
@@ -112,7 +114,7 @@ def main(args: argparse.Namespace):
             source=image_path,
             stream=False,
             save=config.save_run,
-            imgsz=config.image_size,
+            imgsz=config.imgsz,
         )
         if config.save:
             f_name = os.path.splitext(os.path.basename(image_path))[0]
@@ -126,5 +128,9 @@ if __name__ == "__main__":
     args = get_args()
     main(args)
 
+
 # Conclusion:
 #   Regardless of using larger model or/and larger image size, the generalization error is too poor.
+class Test(TestCase):
+    def test_yolo_model(self):
+        self.fail()

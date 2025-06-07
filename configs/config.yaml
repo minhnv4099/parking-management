@@ -1,17 +1,1 @@
-defaults:
-  - cfg: yolo
-  - model: yolo
-  - task_cfg: predict
-  - data: sample
-
-hydra:
-  run:
-    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
-  job:
-    name: logs
-    chdir: True
-  job_logging:
-    version: 1
-    formatters:
-      simple:
-        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+# @package _global_defaults:  - _self_  - model: yolo  - mode@task_cfg: yolo/predict  - data: default  - paths: default  - override hydra/sweeper: basichydra:  searchpath:    - pkg://src  run:    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}  job:    chdir: True  job_logging:    version: 1    formatters:      simple:        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'

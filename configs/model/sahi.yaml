@@ -1,28 +1,9 @@
-# Config for Sahi model
 _target_: src.models.sahi.SahiModel
+#_partial_: True
 
-# argument for init of
-cfg:
-  ...
+defaults:
+  - _self_
 
-task_cfg:
-  _target_: src.models.sahi.SahiPredictionConfig
-  model_name: yolo11n
-  model: null
-  project: null
-  save: True
-  device: cpu
-  mode: predict
-  task: predict
+cfg: ${cfg}
 
-  model_type: ultralytics
-  conf_threshold: 0.25
-  hide_conf: True
-  slice_height: 256
-  slice_width: 256
-  overlap_height_ratio: 0.2
-  overlap_width_ratio: 0.2
-  rect_th: 2
-  text_size: 0.5
-  hide_labels: True
-  image_size: 640
+task_cfg: ${task_cfg}

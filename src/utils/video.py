@@ -8,11 +8,12 @@ import cv2
 from typing import Union, List, Iterable
 import numpy as np
 
+
 def extract_frames(
         video_path: str,
         out_dir: str = None,
         frac: Union[float, List[float]] = 0.0,
-) -> None:
+) -> tuple:
     """
     :param video_path: Path to video needed to extract frames
     :param out_dir:
@@ -25,10 +26,9 @@ def extract_frames(
     video_name = video_path.split("/")[-1].split(".")[0]
     os.makedirs(out_dir, exist_ok=True)
 
-    video = cv2.VideoCapture(video_path)
-    assert video.isOpened()
+    cap = cv2.VideoCapture(video_path)
+    frame_count = count_frame(cap)
 
-    frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
     frac_array = np.array(
         frac if isinstance(frac, Iterable) else [frac],
         dtype=np.float16
@@ -40,15 +40,32 @@ def extract_frames(
     )
     if frac == -1: index_of_frame = list(range(frame_count))
 
+    f_paths = list()
+
     for i in range(frame_count):
-        ret, frame = video.read()
+        ret, frame = cap.read()
         if ret:
             if i in index_of_frame:
-                frame_path = os.path.join(out_dir, f"{video_name}_frame_{i}th.png")
+                frame_path = os.path.join(out_dir, f"{video_name}_frame_{i}th.jpg")
                 cv2.imwrite(frame_path, frame)
+                f_paths.append(frame_path)
         else:
             break
 
-    video.release()
+    cap.release()
 
-    return out_dir
+    return out_dir, f_paths
+
+
+def count_frame(video: Union[str|cv2.VideoCapture]) -> int:
+    if not isinstance(video, cv2.VideoCapture):
+        video = cv2.VideoCapture(video)
+    assert video.isOpened()
+    return int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+
+
+def get_fps(video: Union[str|cv2.VideoCapture]) -> int:
+    if not isinstance(video, cv2.VideoCapture):
+        video = cv2.VideoCapture(video)
+    assert video.isOpened()
+    return int(video.get(cv2.CAP_PROP_FPS))

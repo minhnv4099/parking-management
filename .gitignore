@@ -16,3 +16,8 @@ assets/
 # hydra
 outputs/
 .hydra/
+multirun/
+configs/
+
+# .md files
+commit_format.md

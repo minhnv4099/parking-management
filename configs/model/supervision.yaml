@@ -6,7 +6,7 @@ cfg:
   ...
 
 task_cfg:
-  _target_: src.models.supervision.SvPredictionConfig
+  _target_: src.models.supervision.SvPredictingConfig
   model_name: yolo11n
   model: null
   project: null

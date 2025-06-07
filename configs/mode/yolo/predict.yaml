@@ -1,0 +1,38 @@
+# path to class
+_target_: src.models.yolo.config.YoloPredictingConfig
+
+# name of model (e.g. yolo11n, yolo11l), no '.pt'
+model_name: yolo11n
+
+# name of model with extension (.pt)
+model: null
+
+# project-root-relative path to checkpoint
+ckpt: null
+
+# absolute path to checkpoint by joining project root and ckpt
+# This ensures that the checkpoint is always readable regardless changing working directory from hydra
+abs_ckpt: null
+
+# location to store outputs
+project: null
+
+# if set, save predicted image to 'project'
+save: True
+
+# device to run model
+device: cpu
+
+# e.g. train/predict
+mode: predict
+
+# e.g. detect/seg
+task: detect
+
+# image size when predicting
+imgsz: 640
+
+save_run: False
+
+# useful for creating folder to contain outputs from various tasks
+model_task: yolo
