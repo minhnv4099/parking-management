@@ -1,7 +1,5 @@
-#
 #  Copyright (c) 2025  Van Minh Nguyen
-#  Licensed under the MIT license
-#
+#  Licensed under the MIT License.
 
 from dataclasses import dataclass, field
 from typing import Optional
@@ -11,11 +9,19 @@ from typing import Optional
 class TaskConfig:
     model_name: Optional[str] = field(
         default=None,
-        metadata={"help": "name of model"},
+        metadata={"help": "name of model (e.g. yolo11n, yolo11l)"},
     )
     model: Optional[str] = field(
         default=None,
-        metadata={"help": "path of model"}
+        metadata={"help": "name of model with extension (.pt)"}
+    )
+    ckpt: Optional[str] = field(
+        default=None,
+        metadata={"help": "project-root-relative path to checkpoint"},
+    )
+    abs_ckpt: Optional[str] = field(
+        default=None,
+        metadata={"help": "absolute path to checkpoint"},
     )
     project: Optional[str] = field(
         default=None,
@@ -31,7 +37,7 @@ class TaskConfig:
     )
     mode: Optional[str] = field(
         default=None,
-        metadata={"help": "e.g. train/predict/val"}
+        metadata={"help": "e.g. train/predict"}
     )
     task: Optional[str] = field(
         default="detect",
