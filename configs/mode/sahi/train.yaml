@@ -1,0 +1,5 @@
+# @package task_cfg
+defaults:
+  - _self_
+
+_target_: src.models.sahi.SahiTrainingConfig

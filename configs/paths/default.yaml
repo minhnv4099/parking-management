@@ -1,0 +1,18 @@
+# paths useful for runtime
+defaults:
+  - _self_
+
+# location of project
+root_dir: ${hydra:runtime.cwd}
+
+# location of data/ in project root
+data_dir: ${paths.root_dir}/data/
+
+# location of logs/ in project root
+log_dir: ${paths.root_dir}/logs
+
+# location of 'output/' directory created by hydra
+output_dir: ${hydra:runtime.output_dir}
+
+# location of working dir, which may be changed to another because of changing dir from hydra
+work_dir: ${hydra:runtime.cwd}

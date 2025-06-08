@@ -1,0 +1,22 @@
+# @package task_cfg
+_target_: src.models.sam.SamPredictingConfig
+
+model_name: sam2.1_b
+model: null
+project: null
+save: True
+device: mps
+mode: predict
+task: segment
+save_run: False
+
+export_box: True
+box_dir: data/iterm/boxes/
+prompt_type: points
+prompt_dir: null
+show_masks: True
+PROMPT_TYPES: ["points", ]
+
+line_width: 1
+show_labels: False
+show_boxes: True

@@ -1,0 +1,3 @@
+defaults:
+  - _self_
+  - /mode: ${model}/train # or "${mode}

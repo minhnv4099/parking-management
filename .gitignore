@@ -4,20 +4,17 @@
 .DS_Store/
 
 #python file
-src/main.py
 
 # folder
 data/
 tmp/
-models/
-src/prior_test/outputs_*
-assets/
+/models/
+assets/pretrained_results
 
 # hydra
-outputs/
+/outputs/
 .hydra/
-multirun/
-configs/
+/multirun/
 
 # .md files
 commit_format.md
