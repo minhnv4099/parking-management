@@ -38,3 +38,6 @@ class Model(nn.Module):
 
     def postprocess(self, *args, **kwargs):
         ...
+
+    def train(self, *args, **kwargs):
+        ...

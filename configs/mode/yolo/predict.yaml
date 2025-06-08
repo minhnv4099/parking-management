@@ -1,3 +1,4 @@
+# @package task_cfg
 # path to class
 _target_: src.models.yolo.config.YoloPredictingConfig
 

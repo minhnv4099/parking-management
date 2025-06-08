@@ -8,14 +8,14 @@ import logging
 import warnings
 import hydra
 from hydra.utils import instantiate
-from omegaconf import DictConfig, OmegaConf, ListConfig
+from omegaconf import DictConfig
 
 warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(os.path.basename(__file__))
 
 
-@hydra.main(config_path="../configs/", config_name="predict", version_base="1.1")
+@hydra.main(config_path="../configs/", config_name="train", version_base="1.1")
 def main(cfg: DictConfig):
     logger.info(f"override config: {cfg}")
     # logger.info("check paths:")
@@ -23,16 +23,15 @@ def main(cfg: DictConfig):
     #     logger.info(f"{' ' * 6}{k}{' ' * (15 - len(k))}{cfg.paths[k]}")
 
     logger.info(f"data: {cfg.data}")
+
     logger.info("instantiate model")
     model_cls = instantiate(cfg.model)
     model = model_cls()
 
-    logger.info('start inferencing')
-    model.predict(source=cfg.data.path)
-
-    logger.info("finish inferencing")
+    logger.info("start training")
+    model.train()
+    logger.info("finish training")
 
 
 if __name__ == '__main__':
     main()
-    ...

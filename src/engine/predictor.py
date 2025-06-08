@@ -8,7 +8,7 @@ class Predictor:
     def __init__(self, model):
         self.model = model
 
-    def predict(self, source: str, predict_cfg: TaskConfig):
+    def predict(self, source: str, predict_cfg: TaskConfig = None):
         return self.model.predict(
             source,
             **predict_cfg.__dict__

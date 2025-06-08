@@ -1,26 +1,53 @@
-_target_: src.tasks.yolo.YoloTrainingConfig
+# @package task_cfg
+_target_: src.models.yolo.YoloTrainingConfig
 
+## auxiliary arguments to construct costumed model
+# name of model (e.g. yolo11n, yolo11l), no '.pt'
 model_name: yolo11n
-mode: predict
+
+# name of model with extension (.pt)
+model: null
+
+# project-root-relative path to checkpoint
+ckpt: null
+
+# absolute path to checkpoint by joining project root and ckpt
+# This ensures that the checkpoint is always readable regardless changing working directory from hydra
+abs_ckpt: null
+
+# location to store outputs
+project: null
+
+# if set, save predicted image to 'project'
+save: True
+
+# e.g. train/predict
+mode: train
+
+# e.g. detect/seg
 task: detect
 
-model: null
+save_run: True
+
+# useful for creating folder to contain outputs from various tasks
+model_task: yolo
+
+
+## inclusive keyword arguments used for training
 data: ${data.path}
-epoches: 100
+epochs: 50
 time: null
-patience: 10
+patience: 50
 batch: 1
-imgsz: 640
-save: True
 save_period: -1
 cache: True
-device: mps
-project: null
 name: null
 exist_ok: True
 pretrained: True
 optimizer: AdamW
 seed: 0
+imgsz: 640
+device: cpu
 single_cls: False
 classes: null
 multi_scale: False
@@ -30,7 +57,7 @@ fraction: 1.0
 profile: False
 freeze: null
 lr0: 0.1
-lr1: 0.01
+lrf: 0.01
 momentum: 0.9
 weight_decay: 0.0005
 warmup_epochs: 3.0
@@ -38,6 +65,7 @@ warmup_momentum: 0.8
 warmup_bias_lr: 0.1
 box: 0.1
 cls: 12.0
+pose: 12.0
 kobj: 2.0
 nbs: 64
 overlap_mask: True

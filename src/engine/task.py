@@ -25,21 +25,34 @@ class TaskConfig:
     )
     project: Optional[str] = field(
         default=None,
-        metadata={"help": "location to store outputs"}
+        metadata={"help": "Name of the project directory where training outputs "
+                          "are saved. Allows for organized storage of different experiments."}
     )
     save: Optional[bool] = field(
-        default=False,
-        metadata={"help": "if set, save outputs"}
+        default=True,
+        metadata={"help": "Enables saving of training checkpoints and final model weights. "
+                          "Useful for resuming training or model deployment"}
     )
-    device: Optional[str] = field(
-        default="cpu",
-        metadata={"help": "device to run model"}
+    save_run: Optional[bool] = field(
+        default=False,
+        metadata={"help": "if set, allow runtime save output by default"}
+    )
+    device: Optional[int | str | list] = field(
+        default=None,
+        metadata={"help": "Specifies the computational device(s) for training: "
+                          "a single GPU (device=0), multiple GPUs (device=[0,1]), CPU (device=cpu), "
+                          "MPS for Apple silicon (device=mps), or auto-selection of most idle GPU (device=-1)"
+                          "or multiple idle GPUs (device=[-1,-1])"}
     )
     mode: Optional[str] = field(
         default=None,
         metadata={"help": "e.g. train/predict"}
     )
     task: Optional[str] = field(
-        default="detect",
-        metadata={"help": ""}
+        default=None,
+        metadata={"help": "e.g detect/segment/track/..."}
+    )
+    EXCLUSIVE_KEYS: Optional[list] = field(
+        default_factory=lambda: [],
+        metadata={"help": ""},
     )

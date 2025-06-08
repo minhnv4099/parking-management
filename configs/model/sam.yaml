@@ -4,5 +4,5 @@ defaults:
 _target_: src.models.sam.SamModel
 _partial_: True
 
-cfg: ???
+cfg: ${cfg}
 task_cfg: ${task_cfg}

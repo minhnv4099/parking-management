@@ -1,2 +1,3 @@
+# @package cfg
 # Config for model architecture
 _target_: src.models.yolo.YoloConfig
